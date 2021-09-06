@@ -4,7 +4,7 @@
   
   ## Description 
 
-  Creates a webpage containing information on a projects team members based on user inputing teaam member information in the terminal.
+  A employee management sytem keeping a editable record of all employees, including thier salaries, roles, deparments, names, and id's.
   
   ## Table of Contents
   
@@ -17,11 +17,11 @@
   
   ## Installation
   
-  To install download or clone the files from the repository and open them in vs code. Then from the root directory run 'npm init' followed by 'npm install inquirer' in the command line
+  To install download or clone the files from the repository and open them in vs code. Then from the root directory run 'npm init' followed by 'npm install inquirer' 'npm install express' 'npm install mysql2' 'npm install console.table --save' in the command line
   
   ## Usage 
   
-  To use this program complete the istallation instructions and from the root directory run 'node index' in the terminal command line. Answer all the questions and upon completion your new ReadMe.md will be created in the dist folder.
+  To use this program complete the istallation instructions and from the root directory run 'npm start' in the terminal command line.
 
   ## Walkthrough Video & ScreenShot
 
