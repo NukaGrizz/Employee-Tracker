@@ -2,27 +2,57 @@ const inquirer = require('inquirer');
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
-const db = require(`./db/connection`);
+const httpReq = require('./routes/httpRequests')
 
+var deptArr = [];
+var rolArr = [];
+var empArr =[];
 
-//const inputCheck = require('./utils/inputCheck');
+const inputCheck = require('./utils/inputCheck');
 const apiRoutes = require('./routes/apiRoutes');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use('/api', apiRoutes);
 
-app.get('/', (req, res) => {
-    res.json({
-      message: 'Hello World'
-    });
-});
+const loadData = () => {
+        Promise.resolve(httpReq.getDepartments())
+            .then(function(res) {
+                return new Promise(function(resolve, reject) {
+                    deptArr = res;
+                    //console.log(deptArr);
+                    resolve(deptArr);
+                });
+            }).then(function() {console.log(rolArr);console.log(deptArr);console.log(empArr);})
+        Promise.resolve(httpReq.getRoles())
+            .then(function(res) {
+                return new Promise(function(resolve, reject) {
+                    rolArr = res;
+                    //console.log(rolArr);
+                    resolve(rolArr);
+                });
+            }).then(function() {console.log(rolArr);console.log(deptArr);console.log(empArr);})
+        Promise.resolve(httpReq.getEmployees())
+            .then(function(res) {
+                return new Promise(function(resolve, reject) {
+                    empArr = res;
+                    //console.log(empArr);
+                    resolve(empArr);
+                });
+        })
+        .then(function() {
+            return new Promise(function(resolve, reject) {
+            promptMenu()
+            });     
+})};
 
-const promptUser = () => {
-    let departmentsArray = getdepartments();
-    let rolesArray = getRoles();
-    let employeesArray = getEmployees();
-    return inquirer.prompt([
+const promptMenu = () => {
+    
+    let departmentsArray = deptArr;
+    let rolesArray = rolArr;
+    let employeesArray = empArr;
+
+    inquirer.prompt([
       {
         type: 'list',
         name: 'action',
@@ -115,18 +145,18 @@ const promptUser = () => {
             }
         },
         filter: (answer) => {
-            let result = departmentArray.filter(it => it.name === answer).map(it => it.id)
+            let result = departmentsArray.filter(it => it.name === answer).map(it => it.id)
             return result;
         }
       },
       {
         type: 'list',
-        name: 'remRoleName',
+        name: 'remRoleTitle',
         message: 'Select the name for the Department to be Removed. (Required)',
-        choices: rolesArray.map(it => it.name),
+        choices: rolesArray.map(it => it.title),
         when: (answers) => answers.action === 'Remove Role',
-        validate: remRoleNameInput => {
-            if (remRoleNameInput) {
+        validate: remRoleTitleInput => {
+            if (remRoleTitleInput) {
               return true;
             } else {
               console.log("Please enter the name for the Department to be Removed!");
@@ -185,19 +215,74 @@ const promptUser = () => {
         type: 'list',
         name: 'newEmployeeManager',
         message: 'Select the Manager for this Employee. (Required)',
-        choices: employeesArray.map(it => it.title).push(null),
+        choices: employeesArray.map(it => it.last_name),
         when: (answers) => answers.action === 'Add Employee',
         filter: (answer) => {
             if (answer != null) {
-            let result = employeesArray.filter(it => it.name === answer).map(it => it.id)
+            let result = employeesArray.filter(it => it.last_name === answer).map(it => it.id)
             return result;
             } else {
             return null;
             }
         }
       },
-    ]);
-  };
+      {
+        type: 'list',
+        name: 'remEmployeeName',
+        message: 'Select the last name of the Employee to be Removed. (Required)',
+        choices: employeesArray.map(it => it.last_name),
+        when: (answers) => answers.action === 'Remove Employee',
+        validate: remEmployeeNameInput => {
+            if (remEmployeeNameInput) {
+              return true;
+            } else {
+              console.log("Please Select the last name of the Employee to be Removed!");
+              return false;
+            }
+        }
+      },
+      {
+        type: 'list',
+        name: 'updateEmployeeManager',
+        message: 'Select the Manager for this Employee. (Required)',
+        choices: employeesArray.map(it => it.last_name),
+        when: (answers) => answers.action === 'Update Employee Manager',
+        filter: (answer) => {
+            if (answer != null) {
+            let result = employeesArray.filter(it => it.last_name === answer).map(it => it.id)
+            return result;
+            } else {
+            return null;
+            }
+        }
+      },
+      {
+        type: 'list',
+        name: 'updateEmployeeRole',
+        message: 'Select the Role for this Employee. (Required)',
+        choices: rolesArray.map(it => it.title),
+        when: (answers) => answers.action === 'Update Employee Role',
+        filter: (answer) => {
+            if (answer != null) {
+            let result = rolesArray.filter(it => it.title === answer).map(it => it.id)
+            return result;
+            } else {
+            return null;
+            }
+        }
+      }
+    ])
+    .then(answers => {
+        console.log(answers);
+        return loadData();
+    });
+};
+
+app.get('/', (req, res) => {
+    res.json({
+      message: 'Hello World'
+    });
+});
 
 //Default response for any other request (Not Found)
 app.use((req, res) => {
@@ -206,5 +291,5 @@ app.use((req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    promptUser();
-});
+    loadData();
+    });

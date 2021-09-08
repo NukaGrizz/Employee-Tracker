@@ -3,8 +3,7 @@ const router = express.Router();
 const db = require('../../db/connection');
 const inputCheck = require('../../utils/inputCheck');
 
-// Get all roles
-router.get('/roles', (req, res) => {
+const getRoles = (req, res) => {
   const sql = `SELECT * FROM roles`;
 
   db.query(sql, (err, rows) => {
@@ -16,7 +15,13 @@ router.get('/roles', (req, res) => {
           message:'success',
           data: rows
       });
-  });
+  });  
+}
+
+
+// Get all roles
+router.get('/roles', (req, res) => {
+  getRoles(req, res);
 });
 
 // Delete a role
