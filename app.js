@@ -38,12 +38,14 @@ const loadData = () => {
         })
         .then(function() {
             return new Promise(function(resolve, reject) {
+            //Once the info from databse is gathered into Arrays go to Main menu
             promptMenu()
             });     
 })};
 
 // Runs the inquirer in the console and then calls functions to render info or push any data changes to database based on user input
 const promptMenu = () => {
+    //setup Arrays with data from loadData to be used in inquirer for main menu
     let departmentsArray = deptArr;
     let rolesArray = rolArr;
     let employeesArray = empArr;
@@ -279,7 +281,7 @@ const promptMenu = () => {
       }
     ])
     .then(answers => {
-        //switch function to decide what to do based on user selection
+        //switch function to decide what to do based on user selection in inquirer above
         switch(answers.action){
             case 'View All Departments':
                 let depTable = cTable.getTable(deptArr);
@@ -318,25 +320,28 @@ const promptMenu = () => {
                 empRoutes.deleteEmployee(answers);
                 break;
         }
+        //reload the information from the databases before returning to main menu
         return loadData();
     });
 };
 
+//show a start message in the console.
+console.log('______________________________________________________________________');
+console.log('|                                                                      |');
+console.log('|   ____   ___    ___   ____    _        _____   __   __  ____   ____  |');
+console.log('|  |  __| |   \\  /   | |  _ \\  | |      /  _  \\  \\ \\ / / |  __| |  __| |');
+console.log('|  | |__  | |\\ \\/ /| | | |_| | | |      | | | |   \\   /  | |__  | |__  |');
+console.log('|  |  __| | | \\  / | | |  __/  | |      | | | |    | |   |  __| |  __| |');
+console.log('|  | |__  | |  \\/  | | | |     | |___   | |_| |    | |   | |__  | |__  |');
+console.log('|  |____| |_|      |_| |_|     |_____|  \\_____/    |_|   |____| |____| |');
+console.log('|   ___    ___     _____    _____                                      |');
+console.log('|  |   \\  /   |   / ____|  |  __ \\                                     |');
+console.log('|  | |\\ \\/ /| |  | |  ___  | |__| |                                    |');
+console.log('|  | | \\  / | |  | | |_  | |     /                                     |');
+console.log('|  | |  \\/  | |  | |___| | | |\\ \\                                      |');
+console.log('|  |_|      |_|   \\_____/  |_| \\_\\                                     |');
+console.log('|______________________________________________________________________|');
+console.log('By NukaGrizz')
 
-    console.log('______________________________________________________________________');
-    console.log('|                                                                      |');
-    console.log('|   ____   ___    ___   ____    _        _____   __   __  ____   ____  |');
-    console.log('|  |  __| |   \\  /   | |  _ \\  | |      /  _  \\  \\ \\ / / |  __| |  __| |');
-    console.log('|  | |__  | |\\ \\/ /| | | |_| | | |      | | | |   \\   /  | |__  | |__  |');
-    console.log('|  |  __| | | \\  / | | |  __/  | |      | | | |    | |   |  __| |  __| |');
-    console.log('|  | |__  | |  \\/  | | | |     | |___   | |_| |    | |   | |__  | |__  |');
-    console.log('|  |____| |_|      |_| |_|     |_____|  \\_____/    |_|   |____| |____| |');
-    console.log('|   ___    ___     _____    _____                                      |');
-    console.log('|  |   \\  /   |   / ____|  |  __ \\                                     |');
-    console.log('|  | |\\ \\/ /| |  | |  ___  | |__| |                                    |');
-    console.log('|  | | \\  / | |  | | |_  | |     /                                     |');
-    console.log('|  | |  \\/  | |  | |___| | | |\\ \\                                      |');
-    console.log('|  |_|      |_|   \\_____/  |_| \\_\\                                     |');
-    console.log('|______________________________________________________________________|');
-    console.log('By NukaGrizz')
-    loadData();
+//start the program
+loadData();

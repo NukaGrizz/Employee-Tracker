@@ -1,5 +1,6 @@
 const db = require('../../db/connect');
 
+//Get departments Array
 const getDepartments = () => {
     const sql = `SELECT * FROM department`;
 
@@ -13,6 +14,7 @@ const getDepartments = () => {
     });
 };
 
+//Get roles Array
 const getRoles = () => {
     const sql = `SELECT roles.*, department.name AS Department
                  FROM roles
@@ -28,6 +30,7 @@ const getRoles = () => {
     });
 };
 
+//Get Employees Array
 const getEmployees = () => {
     const sql = `SELECT e.*, roles.title AS Role, roles.salary AS Salary, department.name AS Department, CONCAT(m.first_name, ',', m.last_name) AS Manager 
                 FROM employees e
