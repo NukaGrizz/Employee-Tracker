@@ -1,4 +1,4 @@
-const db = require('../../db/connection'); 
+const db = require('../../db/connect'); 
 
 // Delete a departments
 const deleteDepartment = (answers) => {
