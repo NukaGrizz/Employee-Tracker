@@ -17,11 +17,11 @@
   
   ## Installation
   
-  To install download or clone the files from the repository and open them in vs code. Then from the root directory run 'npm init' followed by 'npm install inquirer' 'npm install express' 'npm install mysql2' 'npm install console.table --save' in the command line
+  To install download or clone the files from the repository and open them in vscode. Then from the root directory run 'npm init' followed by 'npm install inquirer' 'npm install mysql2' 'npm install console.table --save' in the command line.
   
   ## Usage 
   
-  To use this program complete the istallation instructions and from the root directory run 'npm start' in the terminal command line.
+  To use this program complete the istallation instructions and from the root directory run 'npm start' in the command line.
 
   ## Walkthrough Video & ScreenShot
 
@@ -36,10 +36,6 @@
   ## Contributing
   
   Anyone is allowed to contribute to this open source project. See the License section for specifics
-  
-  ## Tests
-  
-  To test this project install jest by running 'npm install jest' and then running 'npm run test'
 
   ## Questions
 

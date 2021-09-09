@@ -1,17 +1,26 @@
 {
-  "name": "challenge-twelve",
+  "name": "employee-tracker",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "[![MIT License](https://img.shields.io/badge/License-MIT-blue)](https://choosealicense.com/licenses/mit/)",
+  "main": "server.js",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.1.2",
+    "mysql2": "^2.3.0"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NukaGrizz/Employee-Tracker.git"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1",
-    "inquirer": "^8.1.2",
-    "mysql2": "^2.3.0"
-  }
+  "bugs": {
+    "url": "https://github.com/NukaGrizz/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/NukaGrizz/Employee-Tracker#readme"
 }
