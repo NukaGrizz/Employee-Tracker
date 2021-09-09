@@ -119,15 +119,7 @@ const promptMenu = () => {
         type: 'number',
         name: 'newRoleSalary',
         message: 'Enter the salary of the new Role. (Required)',
-        when: (answers) => answers.action === 'Add Role',
-        validate: newRoleSalaryInput => {
-            if (newRoleSalaryInput === Number) {
-              return true;
-            } else {
-              console.log("Enter the salary of the new Role");
-              return false;
-            }
-          }
+        when: (answers) => answers.action === 'Add Role'
       },
       {
         type: 'list',
