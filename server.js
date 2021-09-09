@@ -6,7 +6,7 @@ const cTable = require('console.table')
 const dbQuery = require('./routes/dbQueryRoutes/menuArrDataRoutes')
 const deptRoutes = require('./routes/dbQueryRoutes/departmentRoutes')
 const rolRoutes = require('./routes/dbQueryRoutes/rolesRoutes');
-const { title } = require('process');
+const empRoutes = require('./routes/dbQueryRoutes/employeeRoutes');
 
 var deptArr = [];
 var rolArr = [];
@@ -49,6 +49,9 @@ const promptMenu = () => {
     let departmentsArray = deptArr;
     let rolesArray = rolArr;
     let employeesArray = empArr;
+    let employeesArrayMgr = employeesArray.map(it => (it.first_name + ' ' + it.last_name));
+    employeesArrayMgr.push('null');
+    
 
     inquirer.prompt([
       {
@@ -123,7 +126,7 @@ const promptMenu = () => {
             if (newRoleSalaryInput) {
               return true;
             } else {
-              console.log("Please enter your Intern's school!");
+              console.log("Enter the salary of the Role to be added");
               return false;
             }
           }
@@ -213,10 +216,10 @@ const promptMenu = () => {
         type: 'list',
         name: 'newEmployeeManager',
         message: 'Select the Manager for this Employee. (Required)',
-        choices: employeesArray.map(it => (it.first_name + ' ' + it.last_name)),
+        choices: employeesArrayMgr,
         when: (answers) => answers.action === 'Add Employee',
         filter: (answer) => {
-            if (answer != null) {
+            if (answer !='null') {
             let result = employeesArray.filter(it => (it.first_name + ' ' + it.last_name) === answer).map(it => it.id)
             return result;
             } else {
@@ -226,7 +229,7 @@ const promptMenu = () => {
       },
       {
         type: 'list',
-        name: 'remEmployeeName',
+        name: 'remEmployeeId',
         message: 'Select the last name of the Employee to be Removed. (Required)',
         choices: employeesArray.map(it => (it.first_name + ' ' + it.last_name)),
         when: (answers) => answers.action === 'Remove Employee',
@@ -241,10 +244,10 @@ const promptMenu = () => {
       },
       {
         type: 'list',
-        name: 'updateEmployeeManager',
-        message: 'Select the Manager for this Employee. (Required)',
+        name: 'empTobeUpdated',
+        message: 'Select the Name of the Employee to be updated. (Required)',
         choices: employeesArray.map(it => (it.first_name + ' ' + it.last_name)),
-        when: (answers) => answers.action === 'Update Employee Manager',
+        when: (answers) => answers.action === 'Update Employee Role'|| answers.action === 'Update Employee Manager',
         filter: (answer) => {
             if (answer != null) {
             let result = employeesArray.filter(it => (it.first_name + ' ' + it.last_name) === answer).map(it => it.id)
@@ -256,8 +259,23 @@ const promptMenu = () => {
       },
       {
         type: 'list',
-        name: 'updateEmployeeRole',
-        message: 'Select the Role for this Employee. (Required)',
+        name: 'updateEmployeeManager',
+        message: 'Select the new Manager for this Employee. (Required)',
+        choices: employeesArrayMgr,
+        when: (answers) => answers.action === 'Update Employee Manager',
+        filter: (answer) => {
+            if (answer != 'null') {
+            let result = employeesArray.filter(it => (it.first_name + ' ' + it.last_name) === answer).map(it => it.id)
+            return result;
+            } else {
+            return null;
+            }
+        }
+      },
+      {
+        type: 'list',
+        name: 'empRoleNew',
+        message: 'Select the new Role for this Employee. (Required)',
         choices: rolesArray.map(it => it.title),
         when: (answers) => answers.action === 'Update Employee Role',
         filter: (answer) => {
@@ -298,19 +316,18 @@ const promptMenu = () => {
                 rolRoutes.deleteRole(answers);
                 break;
             case 'Add Employee':
-                console.log(8)
+                empRoutes.createEmployee(answers);
                 break;
             case 'Update Employee Role':
-                console.log(9)
+                empRoutes.updateEmpRole(answers);
                 break;
             case 'Update Employee Manager':
-                console.log(10)
+                empRoutes.updateEmpManager(answers);
                 break;
             case 'Remove Employee':
-                console.log(11)
+                empRoutes.deleteEmployee(answers);
                 break;
         }
-
         return loadData();
     });
 };

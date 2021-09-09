@@ -31,10 +31,11 @@ const getRoles = () => {
 };
 
 const getEmployees = () => {
-    const sql = `SELECT employees.*, roles.title AS Role, roles.salary AS Salary, department.name AS Department 
-                FROM employees
-                LEFT JOIN roles ON employees.role_id = roles.id
-                LEFT JOIN department ON roles.department_id = department.id`;
+    const sql = `SELECT e.*, roles.title AS Role, roles.salary AS Salary, department.name AS Department, CONCAT(m.first_name, ',', m.last_name) AS Manager 
+                FROM employees e
+                LEFT JOIN roles ON e.role_id = roles.id
+                LEFT JOIN department ON roles.department_id = department.id
+                LEFT JOIN employees m ON e.manager_id = m.id`;
 
     return new Promise((resolve, reject) => {
         db.query(sql, (err, rows) => {
