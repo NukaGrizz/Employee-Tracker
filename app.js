@@ -1,7 +1,4 @@
 const inquirer = require('inquirer');
-const express = require('express');
-const PORT = process.env.PORT || 3001;
-const app = express();
 const cTable = require('console.table')
 const dbQuery = require('./routes/dbQueryRoutes/menuArrDataRoutes')
 const deptRoutes = require('./routes/dbQueryRoutes/departmentRoutes')
@@ -332,19 +329,7 @@ const promptMenu = () => {
     });
 };
 
-app.get('/', (req, res) => {
-    res.json({
-      message: 'Hello World'
-    });
-});
 
-//Default response for any other request (Not Found)
-app.use((req, res) => {
-    res.status(404).end();
-});
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
     console.log('______________________________________________________________________');
     console.log('|                                                                      |');
     console.log('|   ____   ___    ___   ____    _        _____   __   __  ____   ____  |');
@@ -361,4 +346,3 @@ app.listen(PORT, () => {
     console.log('|  |_|      |_|   \\_____/  |_| \\_\\                                     |');
     console.log('|______________________________________________________________________|');
     loadData();
-});
