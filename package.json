@@ -4,6 +4,7 @@
   "description": "[![MIT License](https://img.shields.io/badge/License-MIT-blue)](https://choosealicense.com/licenses/mit/)",
   "main": "server.js",
   "dependencies": {
+    "console.table": "^0.10.0",
     "express": "^4.17.1",
     "inquirer": "^8.1.2",
     "mysql2": "^2.3.0",

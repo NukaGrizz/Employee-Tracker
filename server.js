@@ -2,37 +2,35 @@ const inquirer = require('inquirer');
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
-const httpReq = require('./routes/httpRequests')
+const cTable = require('console.table')
+const dbQuery = require('./routes/dbQueryRoutes/menuArrDataRoutes')
+const deptRoutes = require('./routes/dbQueryRoutes/departmentRoutes')
+const rolRoutes = require('./routes/dbQueryRoutes/rolesRoutes');
+const { title } = require('process');
 
 var deptArr = [];
 var rolArr = [];
 var empArr =[];
 
-const inputCheck = require('./utils/inputCheck');
-const apiRoutes = require('./routes/apiRoutes');
-
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use('/api', apiRoutes);
 
 const loadData = () => {
-        Promise.resolve(httpReq.getDepartments())
+        Promise.resolve(dbQuery.getDepartments())
             .then(function(res) {
                 return new Promise(function(resolve, reject) {
                     deptArr = res;
                     //console.log(deptArr);
                     resolve(deptArr);
                 });
-            }).then(function() {console.log(rolArr);console.log(deptArr);console.log(empArr);})
-        Promise.resolve(httpReq.getRoles())
+            })//.then(function() {console.log(rolArr);console.log(deptArr);console.log(empArr);})
+        Promise.resolve(dbQuery.getRoles())
             .then(function(res) {
                 return new Promise(function(resolve, reject) {
                     rolArr = res;
                     //console.log(rolArr);
                     resolve(rolArr);
                 });
-            }).then(function() {console.log(rolArr);console.log(deptArr);console.log(empArr);})
-        Promise.resolve(httpReq.getEmployees())
+            })//.then(function() {console.log(rolArr);console.log(deptArr);console.log(empArr);})
+        Promise.resolve(dbQuery.getEmployees())
             .then(function(res) {
                 return new Promise(function(resolve, reject) {
                     empArr = res;
@@ -117,7 +115,7 @@ const promptMenu = () => {
           }
       },
       {
-        type: 'input',
+        type: 'number',
         name: 'newRoleSalary',
         message: 'Enter the salary of the Role to be added. (Required)',
         when: (answers) => answers.action === 'Add Role',
@@ -215,11 +213,11 @@ const promptMenu = () => {
         type: 'list',
         name: 'newEmployeeManager',
         message: 'Select the Manager for this Employee. (Required)',
-        choices: employeesArray.map(it => it.last_name),
+        choices: employeesArray.map(it => (it.first_name + ' ' + it.last_name)),
         when: (answers) => answers.action === 'Add Employee',
         filter: (answer) => {
             if (answer != null) {
-            let result = employeesArray.filter(it => it.last_name === answer).map(it => it.id)
+            let result = employeesArray.filter(it => (it.first_name + ' ' + it.last_name) === answer).map(it => it.id)
             return result;
             } else {
             return null;
@@ -230,14 +228,14 @@ const promptMenu = () => {
         type: 'list',
         name: 'remEmployeeName',
         message: 'Select the last name of the Employee to be Removed. (Required)',
-        choices: employeesArray.map(it => it.last_name),
+        choices: employeesArray.map(it => (it.first_name + ' ' + it.last_name)),
         when: (answers) => answers.action === 'Remove Employee',
-        validate: remEmployeeNameInput => {
-            if (remEmployeeNameInput) {
-              return true;
+        filter: (answer) => {
+            if (answer != null) {
+            let result = employeesArray.filter(it => (it.first_name + ' ' + it.last_name) === answer).map(it => it.id)
+            return result;
             } else {
-              console.log("Please Select the last name of the Employee to be Removed!");
-              return false;
+            return null;
             }
         }
       },
@@ -245,11 +243,11 @@ const promptMenu = () => {
         type: 'list',
         name: 'updateEmployeeManager',
         message: 'Select the Manager for this Employee. (Required)',
-        choices: employeesArray.map(it => it.last_name),
+        choices: employeesArray.map(it => (it.first_name + ' ' + it.last_name)),
         when: (answers) => answers.action === 'Update Employee Manager',
         filter: (answer) => {
             if (answer != null) {
-            let result = employeesArray.filter(it => it.last_name === answer).map(it => it.id)
+            let result = employeesArray.filter(it => (it.first_name + ' ' + it.last_name) === answer).map(it => it.id)
             return result;
             } else {
             return null;
@@ -274,6 +272,45 @@ const promptMenu = () => {
     ])
     .then(answers => {
         console.log(answers);
+        switch(answers.action){
+            case 'View All Departments':
+                let depTable = cTable.getTable(deptArr);
+                console.log(depTable);
+                break;
+            case 'View All Roles':
+                let rolTable = cTable.getTable(rolArr);
+                console.log(rolTable);
+                break;
+            case 'View All Employees':
+                let empTable = cTable.getTable(empArr);
+                console.log(empTable);
+                break;
+            case 'Add Department':
+                deptRoutes.createDepartment(answers);
+                break;
+            case 'Remove Department':
+                deptRoutes.deleteDepartment(answers);
+                break;
+            case 'Add Role':
+                rolRoutes.createRole(answers);
+                break;
+            case 'Remove Role':
+                rolRoutes.deleteRole(answers);
+                break;
+            case 'Add Employee':
+                console.log(8)
+                break;
+            case 'Update Employee Role':
+                console.log(9)
+                break;
+            case 'Update Employee Manager':
+                console.log(10)
+                break;
+            case 'Remove Employee':
+                console.log(11)
+                break;
+        }
+
         return loadData();
     });
 };
@@ -291,5 +328,20 @@ app.use((req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log('______________________________________________________________________');
+    console.log('|                                                                      |');
+    console.log('|   ____   ___    ___   ____    _        _____   __   __  ____   ____  |');
+    console.log('|  |  __| |   \\  /   | |  _ \\  | |      /  _  \\  \\ \\ / / |  __| |  __| |');
+    console.log('|  | |__  | |\\ \\/ /| | | |_| | | |      | | | |   \\   /  | |__  | |__  |');
+    console.log('|  |  __| | | \\  / | | |  __/  | |      | | | |    | |   |  __| |  __| |');
+    console.log('|  | |__  | |  \\/  | | | |     | |___   | |_| |    | |   | |__  | |__  |');
+    console.log('|  |____| |_|      |_| |_|     |_____|  \\_____/    |_|   |____| |____| |');
+    console.log('|   ___    ___     _____    _____                                      |');
+    console.log('|  |   \\  /   |   / ____|  |  __ \\                                     |');
+    console.log('|  | |\\ \\/ /| |  | |  ___  | |__| |                                    |');
+    console.log('|  | | \\  / | |  | | |_  | |     /                                     |');
+    console.log('|  | |  \\/  | |  | |___| | | |\\ \\                                      |');
+    console.log('|  |_|      |_|   \\_____/  |_| \\_\\                                     |');
+    console.log('|______________________________________________________________________|');
     loadData();
-    });
+});
