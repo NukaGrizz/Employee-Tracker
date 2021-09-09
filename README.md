@@ -17,7 +17,7 @@
   
   ## Installation
   
-  To install download or clone the files from the repository and open them in vscode. Then from the root directory run 'npm init' followed by 'npm install inquirer' 'npm install mysql2' 'npm install console.table --save' in the command line.
+  To install download or clone the files from the repository and open them in vscode. Then from the root directory run 'npm init' followed by 'npm install inquirer' 'npm install mysql2' 'npm install console.table --save' in the command line. Then from the root directory go to the connection.js file and enter your mysql password between the '' on line ten where it says password:'',  
   
   ## Usage 
   
