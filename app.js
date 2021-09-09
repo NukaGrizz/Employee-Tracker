@@ -5,11 +5,12 @@ const deptRoutes = require('./routes/dbQueryRoutes/departmentRoutes')
 const rolRoutes = require('./routes/dbQueryRoutes/rolesRoutes');
 const empRoutes = require('./routes/dbQueryRoutes/employeeRoutes');
 
+// Define Arrs to be filled by Load data for the menu to render
 var deptArr = [];
 var rolArr = [];
 var empArr =[];
 
-
+// Gets the data in the database to be renderned in the menu and user requests
 const loadData = () => {
         Promise.resolve(dbQuery.getDepartments())
             .then(function(res) {
@@ -41,15 +42,15 @@ const loadData = () => {
             });     
 })};
 
+// Runs the inquirer in the console and then calls functions to render info or push any data changes to database based on user input
 const promptMenu = () => {
-    
     let departmentsArray = deptArr;
     let rolesArray = rolArr;
     let employeesArray = empArr;
     let employeesArrayMgr = employeesArray.map(it => (it.first_name + ' ' + it.last_name));
     employeesArrayMgr.push('null');
     
-
+    //inquirer that runsthe menu and options foir the user
     inquirer.prompt([
       {
         type: 'list',
@@ -60,7 +61,7 @@ const promptMenu = () => {
       {
         type: 'input',
         name: 'newDepartmentName',
-        message: 'Enter the new Department Name. (Required)',
+        message: 'Enter the new Department Name.',
         when: (answers) => answers.action === 'Add Department',
         validate: newDepartmentNameInput => {
             if (newDepartmentNameInput) {
@@ -74,7 +75,7 @@ const promptMenu = () => {
       {
         type: 'input',
         name: 'newDepartmentDescription',
-        message: 'Enter the discription of the new Department. (Required)',
+        message: 'Enter the discription of the new Department.',
         when: (answers) => answers.action === 'Add Department',
         validate: newDepartmentDescriptionInput => {
             if (newDepartmentDescriptionInput) {
@@ -88,14 +89,14 @@ const promptMenu = () => {
       {
         type: 'list',
         name: 'remDepartmentName',
-        message: 'Select the name for the Department to be Removed. (Required)',
+        message: 'Select the name of the Department to be Removed. (Required)',
         choices:departmentsArray.map(it => it.name),
         when: (answers) => answers.action === 'Remove Department',
         validate: remDepartmentNameInput => {
             if (remDepartmentNameInput) {
               return true;
             } else {
-              console.log("Please enter the name for the Department to be Removed!");
+              console.log("Please enter the name of the Department to be Removed!");
               return false;
             }
           }
@@ -103,13 +104,13 @@ const promptMenu = () => {
       {
         type: 'input',
         name: 'newRoleTitle',
-        message: 'Enter the Title of the new Role. (Required)',
+        message: 'Enter the Job Title of the new Role. (Required)',
         when: (answers) => answers.action === 'Add Role',
         validate: newRoleTitleInput => {
             if (newRoleTitleInput) {
               return true;
             } else {
-              console.log("Please enter the Title of the new Role!");
+              console.log("Please enter the Job Title of the new Role!");
               return false;
             }
           }
@@ -117,13 +118,13 @@ const promptMenu = () => {
       {
         type: 'number',
         name: 'newRoleSalary',
-        message: 'Enter the salary of the Role to be added. (Required)',
+        message: 'Enter the salary of the new Role. (Required)',
         when: (answers) => answers.action === 'Add Role',
         validate: newRoleSalaryInput => {
-            if (newRoleSalaryInput) {
+            if (newRoleSalaryInput === Number) {
               return true;
             } else {
-              console.log("Enter the salary of the Role to be added");
+              console.log("Enter the salary of the new Role");
               return false;
             }
           }
@@ -150,14 +151,14 @@ const promptMenu = () => {
       {
         type: 'list',
         name: 'remRoleTitle',
-        message: 'Select the name for the Department to be Removed. (Required)',
+        message: 'Select the name of the Department to be Removed. (Required)',
         choices: rolesArray.map(it => it.title),
         when: (answers) => answers.action === 'Remove Role',
         validate: remRoleTitleInput => {
             if (remRoleTitleInput) {
               return true;
             } else {
-              console.log("Please enter the name for the Department to be Removed!");
+              console.log("Select the name of the Department to be Removed!");
               return false;
             }
           }
@@ -286,7 +287,7 @@ const promptMenu = () => {
       }
     ])
     .then(answers => {
-        console.log(answers);
+        //switch function to decide what to do based on user selection
         switch(answers.action){
             case 'View All Departments':
                 let depTable = cTable.getTable(deptArr);
@@ -345,4 +346,5 @@ const promptMenu = () => {
     console.log('|  | |  \\/  | |  | |___| | | |\\ \\                                      |');
     console.log('|  |_|      |_|   \\_____/  |_| \\_\\                                     |');
     console.log('|______________________________________________________________________|');
+    console.log('By NukaGrizz')
     loadData();

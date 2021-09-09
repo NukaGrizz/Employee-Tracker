@@ -1,6 +1,4 @@
-const express = require("express");
 const db = require('../../db/connection');
-//const inputCheck = require('../utils/inputCheck');
 
 const getDepartments = () => {
     const sql = `SELECT * FROM department`;

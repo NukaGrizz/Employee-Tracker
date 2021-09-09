@@ -1,46 +1,5 @@
 const db = require('../../db/connection');
 
-
-// // Get all employees
-// router.get('/employees', (req, res) => {
-//   const sql = `SELECT employees.*, roles.title AS Role, roles.salary AS Salary, department.name AS Department 
-//               FROM employees
-//               LEFT JOIN roles ON employees.role_id = roles.id
-//               LEFT JOIN department ON roles.department_id = department.id`;
-
-//   db.query(sql, (err, rows) => {
-//       if (err) {
-//           res.status(500).json({ error: err.message });
-//           return;
-//       }
-//       res.json({
-//           message:'success',
-//           data: rows
-//       });
-//   });
-// });
-
-// //Get a single candidate
-// router.get('/employees/:id', (req, res) => {
-//   const sql = `SELECT employees.*, roles.title AS Role, roles.salary AS Salary, department.name AS Department
-//               FROM employees
-//               LEFT JOIN roles ON employees.role_id = roles.id
-//               LEFT JOIN department ON roles.department_id = department.id
-//               WHERE Employees.id = ?`;
-//   const params = [req.params.id];
-
-//   db.query(sql, params, (err, row) => {
-//       if (err) {
-//           res.status(400).json({ error: err.message });
-//           return;
-//       }
-//       res.json({
-//           message: 'success',
-//           data: row
-//       });
-//   });
-// });
-
 // Delete a employee
 const deleteEmployee = (answers) => {
   const sql = `DELETE FROM employees WHERE id = ?`;
