@@ -25,7 +25,7 @@
 
   ## Walkthrough Video & ScreenShot
 
-  https://drive.google.com/file/d/1NlwZAZUuIESlWrxZBjd1MY15tYHITM-9/view?usp=sharing
+  https://drive.google.com/file/d/1RhmPsJsWvcvV9fXgfsP_p_TWGUO-mDY-/view?usp=sharing
   
   ![alt text](./assets/images/Screenshot.png)
   
